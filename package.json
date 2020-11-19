@@ -8,11 +8,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.2.7",
+    "apollo-link-context": "^1.0.20",
     "autoprefixer": "^10.0.2",
+    "formik": "^2.2.5",
+    "graphql": "^15.4.0",
     "next": "10.0.1",
+    "node-fetch": "^2.6.1",
     "postcss-import": "^13.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "tailwindcss": "^1.9.6"
+    "sweetalert2": "^10.10.1",
+    "tailwindcss": "^1.9.6",
+    "yup": "^0.29.3"
   }
 }
