@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
+import Alert from "../components/Alert";
+import AlertContext from "../context/alerts/alertContext";
+import Swal from "sweetalert2";
 
 const NUEVO_CLIENTE = gql`
   mutation nuevoCliente($input: ClienteInput) {
@@ -32,10 +35,10 @@ const OBTENER_CLIENTES_USUARIO = gql`
 
 const NewCliente = () => {
   const router = useRouter();
-
+  const alertContext = useContext(AlertContext);
   // Mensaje de alerta
-  const [mensaje, guardarMensaje] = useState(null);
-
+  const { alert, showAlert } = alertContext;
+  
   // Mutation para crear nuevos clientes
   const [nuevoCliente] = useMutation(NUEVO_CLIENTE, {
     update(cache, { data: { nuevoCliente } }) {
@@ -89,30 +92,26 @@ const NewCliente = () => {
           },
         });
         // console.log(data.nuevoCliente);
-        router.push("/"); // redireccionar hacia clientes
-      } catch (error) {
-        guardarMensaje(error.message.replace("GraphQL error: ", ""));
+        
+        // redireccionar hacia clientes
+        router.push("/"); 
 
-        setTimeout(() => {
-          guardarMensaje(null);
-        }, 2000);
+        Swal.fire(
+          "Registered",
+          "The new client was successfully registered",
+          "success"
+        );
+      } catch (error) {
+        showAlert(error.message.replace("GraphQL error: ", ""), "alert-error");
       }
     },
   });
-
-  const mostrarMensaje = () => {
-    return (
-      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
-        <p>{mensaje}</p>
-      </div>
-    );
-  };
 
   return (
     <Layout>
       <h1 className="text-2xl text-gray-800 font-light">Register New Client</h1>
 
-      {mensaje && mostrarMensaje()}
+      <Alert alert={alert} />
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">
