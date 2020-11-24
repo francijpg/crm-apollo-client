@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
+import AlertContext from "../context/alerts/alertContext";
+import Alert from "../components/Alert";
+import Link from "next/link";
 
 const AUTENTICAR_USUARIO = gql`
   mutation autenticarUsuario($input: AutenticarInput) {
@@ -14,11 +17,10 @@ const AUTENTICAR_USUARIO = gql`
 `;
 
 const Login = () => {
-  // routing
   const router = useRouter();
-
-  const [mensaje, guardarMensaje] = useState(null);
-
+  // const [mensaje, guardarMensaje] = useState(null);
+  const alertContext = useContext(AlertContext);
+  const { alert, showAlert } = alertContext;
   // Mutation para crear nuevos usuarios en apollo
   const [autenticarUsuario] = useMutation(AUTENTICAR_USUARIO);
 
@@ -46,9 +48,9 @@ const Login = () => {
             },
           },
         });
-        console.log(data);
-        guardarMensaje("Authenticating...");
-
+        // console.log(data);
+        // guardarMensaje("Authenticating...");
+        showAlert("Authenticating...", "alert-info");
         // Guardar el token en localstorage
         setTimeout(() => {
           const { token } = data.autenticarUsuario;
@@ -57,30 +59,32 @@ const Login = () => {
 
         // Redireccionar hacia clientes
         setTimeout(() => {
-          guardarMensaje(null);
+          // guardarMensaje(null);
           router.push("/");
         }, 2000);
       } catch (error) {
-        guardarMensaje(error.message.replace("GraphQL error: ", ""));
-        setTimeout(() => {
-          guardarMensaje(null);
-        }, 3000);
+        showAlert(error.message.replace("GraphQL error: ", ""), "alert-error");
+        // guardarMensaje(error.message.replace("GraphQL error: ", ""));
+        // setTimeout(() => {
+        //   guardarMensaje(null);
+        // }, 3000);
       }
     },
   });
 
-  const mostrarMensaje = () => {
-    return (
-      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
-        <p>{mensaje}</p>
-      </div>
-    );
-  };
+  // const mostrarMensaje = () => {
+  //   return (
+  //     <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+  //       <p>{mensaje}</p>
+  //     </div>
+  //   );
+  // };
 
   return (
     <Layout>
-      {mensaje && mostrarMensaje()}
-      
+      {/* {mensaje && mostrarMensaje()} */}
+      <Alert alert={alert} />
+
       <h1 className="text-center text-2xl text-white font-light">Log In</h1>
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-sm">
@@ -145,6 +149,11 @@ const Login = () => {
               className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:cursor-pointer hover:bg-gray-900"
               value="Log in"
             />
+            <Link href="/register">
+            <a className="bg-gray-200 mt-3 p-2 flex justify-center uppercase font-bold hover:bg-gray-400">
+                sign up
+              </a>
+            </Link>
           </form>
         </div>
       </div>
