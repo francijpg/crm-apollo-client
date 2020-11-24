@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, gql } from "@apollo/client";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import AlertContext from "../context/alerts/alertContext";
+import Alert from "../components/Alert";
+import Link from "next/link";
 
 const NUEVA_CUENTA = gql`
   mutation nuevoUsuario($input: UsuarioInput) {
@@ -17,14 +20,12 @@ const NUEVA_CUENTA = gql`
 `;
 
 const Register = () => {
-  // State para el mensaje
-  const [mensaje, guardarMensaje] = useState(null);
+  const router = useRouter();
+  const alertContext = useContext(AlertContext);
+  const { alert, showAlert } = alertContext;
 
   // Mutation para crear nuevos usuarios
   const [nuevoUsuario] = useMutation(NUEVA_CUENTA);
-
-  // Routing
-  const router = useRouter();
 
   // Validación del formulario
   const formik = useFormik({
@@ -60,35 +61,24 @@ const Register = () => {
         });
 
         // Usuario creado correctamente
-        guardarMensaje(
-          `User was created successfully: ${data.nuevoUsuario.nombre} `
+        showAlert(
+          `The user ${data.nuevoUsuario.nombre} was created successfully.`,
+          "alert-ok"
         );
 
         setTimeout(() => {
-          guardarMensaje(null);
           // Redirigir usuario para iniciar sesión
           router.push("/login");
-        }, 3000);
+        }, 2000);
       } catch (error) {
-        guardarMensaje(error.message.replace("GraphQL error: ", ""));
-        setTimeout(() => {
-          guardarMensaje(null);
-        }, 3000);
+        showAlert(error.message.replace("GraphQL error: ", ""), "alert-error");
       }
     },
   });
 
-  const mostrarMensaje = () => {
-    return (
-      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
-        <p>{mensaje}</p>
-      </div>
-    );
-  };
-
   return (
     <Layout>
-      {mensaje && mostrarMensaje()}
+      <Alert alert={alert} />
       <h1 className="text-center text-2xl text-white font-light">
         Create new account
       </h1>
@@ -202,9 +192,14 @@ const Register = () => {
 
             <input
               type="submit"
-              className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:cursor-pointer hover:bg-gray-900"
+              className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900 text-white"
               value="sign up"
             />
+            <Link href="/login">
+              <a className="bg-gray-200 mt-3 p-2 flex justify-center uppercase font-bold hover:bg-gray-400">
+                log in
+              </a>
+            </Link>
           </form>
         </div>
       </div>
