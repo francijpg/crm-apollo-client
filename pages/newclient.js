@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Alert from "../components/Alert";
 import AlertContext from "../context/alerts/alertContext";
 import Swal from "sweetalert2";
+import NumberFormat from "react-number-format";
 
 const NUEVO_CLIENTE = gql`
   mutation nuevoCliente($input: ClienteInput) {
@@ -231,7 +232,7 @@ const NewCliente = () => {
                 Phone
               </label>
 
-              <input
+              <NumberFormat
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="telefono"
                 type="tel"
@@ -239,6 +240,7 @@ const NewCliente = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.telefono}
+                format="+56 (9) ####-####"
               />
             </div>
 
