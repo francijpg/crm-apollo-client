@@ -35,6 +35,30 @@ const Sidebar = () => {
           </Link>
         </li>
       </nav>
+
+      <div className="sm:mt-10">
+        <p className="text-white text-2xl font-black">Graphics</p>
+      </div>
+      <nav className="mt-5 list-none">
+        <li
+          className={
+            router.pathname === "/bestsellers" ? "bg-blue-800 p-2" : "p-2"
+          }
+        >
+          <Link href="/bestsellers">
+            <a className="text-white block">Best Sellers</a>
+          </Link>
+        </li>
+        <li
+          className={
+            router.pathname === "/bestclients" ? "bg-blue-800 p-2" : "p-2"
+          }
+        >
+          <Link href="/bestclients">
+            <a className="text-white block">Best Clients</a>
+          </Link>
+        </li>
+      </nav>
     </aside>
   );
 };
