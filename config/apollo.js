@@ -4,7 +4,7 @@ import { setContext } from "apollo-link-context";
 
 // hacia donde se conectará para obtener los datos
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/",
+  uri: process.env.NEXT_PUBLIC_BACKEND_URL,
   fetch,
 });
 
