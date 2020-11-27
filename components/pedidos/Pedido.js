@@ -40,7 +40,9 @@ const Pedido = ({ pedido }) => {
   // console.log(pedido.pedido)
 
   const [estadoPedido, setEstadoPedido] = React.useState(estado);
-  const [clase, setClase] = React.useState("");
+  // const [clase, setClase] = React.useState("");
+  let borderClass;
+
   // Mutations
   const [actualizarPedido] = useMutation(ACTUALIZAR_PEDIDO);
   const [eliminarPedido] = useMutation(ELIMINAR_PEDIDO, {
@@ -66,7 +68,7 @@ const Pedido = ({ pedido }) => {
     if (estadoPedido) {
       setEstadoPedido(estadoPedido);
     }
-    clasePedido();
+    // clasePedido();
   }, [estadoPedido]);
 
   const cambiarEstadoPedido = async (nuevoEstado) => {
@@ -88,15 +90,22 @@ const Pedido = ({ pedido }) => {
   };
 
   // Función que modifica el color del pedido de acuerdo a su estado
-  const clasePedido = () => {
-    if (estadoPedido === "PENDIENTE") {
-      setClase("border-yellow-500");
-    } else if (estadoPedido === "COMPLETADO") {
-      setClase("border-green-500");
-    } else {
-      setClase("border-red-800");
-    }
-  };
+  // const clasePedido = () => {
+  //   if (estadoPedido === "PENDIENTE") {
+  //     setClase("border-yellow-500");
+  //   } else if (estadoPedido === "COMPLETADO") {
+  //     setClase("border-green-500");
+  //   } else {
+  //     setClase("border-red-800");
+  //   }
+  // };
+  if (estadoPedido === "PENDIENTE") {
+    borderClass = "border-yellow-500";
+  } else if (estadoPedido === "COMPLETADO") {
+    borderClass = "border-green-500";
+  } else {
+    borderClass = "border-red-500";
+  }
 
   const confirmarEliminarPedido = () => {
     Swal.fire({
@@ -127,7 +136,8 @@ const Pedido = ({ pedido }) => {
 
   return (
     <div
-      className={` ${clase} border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}
+      // className={` ${clase} border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}
+      className={`border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg  ${borderClass}`}
     >
       <div>
         <p className="font-bold text-gray-800">
