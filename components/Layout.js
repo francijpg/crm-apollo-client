@@ -11,7 +11,8 @@ const Layout = ({ children }) => {
     <>
       <Head>
         <title>CRM - Clients Admin</title>
-        {/* <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" /> */}
+        {/* Force CDN called to be able to manage estadoPedido in Pedido.js */}
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
       </Head>
       {router.pathname === "/login" || router.pathname === "/register" ? (
         <div className="bg-gray-800 min-h-screen flex flex-col justify-center">
